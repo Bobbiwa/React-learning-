@@ -7,17 +7,20 @@ import './courseCard.less'
 export default function CourseCard(props) {
   return (
     <div>
-      {mockedCoursesList.map((item,index) =>
+      {mockedCoursesList.map((item, index) =>
       (
         <Card key={index} style={{ width: '100%', border: '1px solid green', marginBottom: '20rem', marginTop: '20rem' }}>
-          <div  style={{width:'40%'}}>
+          <div style={{ width: '40%' }}>
             <p className='card-title'>{item.title}</p>
             <p>{item.description}</p>
           </div>
-          <div style={{width:'60%', textAlign:'right'}}>
+          <div style={{ width: '60%', textAlign: 'right' }}>
             <p>
               <span style={{ fontWeight: 'bold' }}>Authors:</span>
-              <span style={{width:'100rem'}}>{item.authors}</span>
+              <span style={{ width: '100rem' }}>
+                {mockedAuthorsList.find((items) => items.id === item.authors[0]).name}{', '}
+                {mockedAuthorsList.find((items) =>  items.id === item.authors[1]).name}
+              </span>
             </p>
             <p>
               <span style={{ fontWeight: 'bold' }}>Duration:</span>
