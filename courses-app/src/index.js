@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import RenderRouter from './config/router'
 import { ConfigProvider } from 'antd';
 import './index.css';
 import App from './App';
@@ -15,7 +17,9 @@ root.render(
         }
       }}
     >
-      <App />
+      <BrowserRouter>
+        <RenderRouter />
+      </BrowserRouter>
     </ConfigProvider>
   </React.StrictMode>
 );
