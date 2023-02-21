@@ -1,13 +1,22 @@
-import React from 'react'
-import Logo from './components/Logo/Logo'
-import './header.less'
-export default function Header(props) {
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import Logo from './components/Logo/Logo';
+import { Button } from 'antd';
+import { removeToken } from '../../utils/token';
+import './header.less';
+
+export default function Header() {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    removeToken();
+    navigate('/login')
+  };
   return (
-    <div className='header-container'>
+    <div className="header-container">
       <Logo />
-      <span className='header-title'>COURSES</span>
-      <span className='header-user'>Dave</span>
-      {props.btn('Logout')}
+      <span className="header-title">COURSES</span>
+      <span className="header-user">Dave</span>
+      <Button onClick={handleClick}>logout</Button>
     </div>
-  )
+  );
 }
