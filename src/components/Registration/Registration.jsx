@@ -94,7 +94,6 @@ export default function Register() {
       const params = { name, email, password };
       const ret = await registerApi(params);
       if (ret.status === 201) {
-        //由于response body没有token，所以注册成功后跳转至login页面
         navigate('/login');
       } else {
         message.error('username or password is incorrect', 1);
