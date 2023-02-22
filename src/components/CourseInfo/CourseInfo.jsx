@@ -17,7 +17,7 @@ export default function CourseInfo({ info }) {
     <div>
       <div>
         <Button
-          onClick={() => navigate('/course')}
+          onClick={() => navigate('/courses')}
           type="primary"
           size="large"
           style={{ marginBottom: '2%' }}

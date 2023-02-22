@@ -32,7 +32,7 @@ export default function CourseCard() {
 
   const handleClick = (id) => {
     return () => {
-      navigate(`/course/${id}`)
+      navigate(`/courses/${id}`)
     }
   }
   return (
