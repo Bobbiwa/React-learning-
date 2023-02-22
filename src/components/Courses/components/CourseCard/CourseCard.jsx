@@ -69,7 +69,7 @@ export default function CourseCard() {
                       {
                         authorsData.find(
                           (items) => items.id === item.authors[0]
-                        ).name
+                        )?.name
                       }
                     </span>
                   </p>
