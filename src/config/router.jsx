@@ -28,7 +28,7 @@ const routerList = [
         element: <Courses />,
       },
       {
-        path: '/create',
+        path: '/courses/add',
         element: <CreateCourse />,
       },
       {

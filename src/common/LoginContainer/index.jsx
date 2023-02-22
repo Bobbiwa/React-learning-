@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import { Form } from 'antd';
 import './index.less'
 export default function LoginContainer(props) {
@@ -22,3 +23,9 @@ export default function LoginContainer(props) {
     </div>
   )
 }
+
+LoginContainer.propTypes = {
+  content: PropTypes.func,
+  onFinish:PropTypes.func,
+  onFinishFailed:PropTypes.func
+};

@@ -10,5 +10,6 @@ export function getToken() {
 
 export function removeToken() {
   window.localStorage.removeItem(TOKEN)
+  window.localStorage.removeItem("name")
 }
 

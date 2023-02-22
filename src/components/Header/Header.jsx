@@ -9,13 +9,13 @@ export default function Header() {
   const navigate = useNavigate();
   const handleClick = () => {
     removeToken();
-    navigate('/login')
+    navigate('/login');
   };
   return (
     <div className="header-container">
       <Logo />
       <span className="header-title">COURSES</span>
-      <span className="header-user">Dave</span>
+      <span className="header-user">{window.localStorage.getItem('name')}</span>
       <Button onClick={handleClick}>logout</Button>
     </div>
   );

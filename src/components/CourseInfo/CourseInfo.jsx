@@ -9,7 +9,6 @@ export default function CourseInfo({ info }) {
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
     info.then((res) => {
-      console.log(res.data);
       setData(res.data.result)
     });
   }, [info]);

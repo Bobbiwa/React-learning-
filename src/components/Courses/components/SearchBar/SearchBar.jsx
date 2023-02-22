@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 export default function SearchBar() {
   const navigate = useNavigate();
   const handleCreate = () => {
-    navigate('/create')
+    navigate('/courses/add')
   }
   return (
     <div className='search-bar-container'>

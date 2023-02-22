@@ -72,8 +72,8 @@ export default function Login() {
   const onFinish = async (values) => {
     const ret = await login(values);
     if (ret.status === 201) {
-      console.log(ret);
       setToken(ret.data.result);
+      window.localStorage.setItem("name",ret.data.user.name)
       navigate('/courses');
     } else {
       message.error('username or password is incorrect', 1);
