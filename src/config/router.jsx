@@ -12,7 +12,7 @@ const routerList = [
     element: <Login />,
   },
   {
-    path: '/register',
+    path: '/registration',
     element: <Register />,
   },
   {
@@ -20,11 +20,11 @@ const routerList = [
     element: <App />,
     children: [
       {
-        path: '/course',
+        path: '/courses',
         element: <Courses />,
       },
       {
-        path: '/course/:id',
+        path: '/courses/:id',
         element: <Courses />,
       },
       {

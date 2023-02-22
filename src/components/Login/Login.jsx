@@ -59,7 +59,7 @@ function loginContent() {
       </Form.Item>
       <footer className="login_footer">
         <span style={{ color: '#fff' }}>{`Don't have an account?`}</span>
-        <a href="/register" className="login_footer_click">
+        <a href="/registration" className="login_footer_click">
           click me
         </a>
       </footer>
@@ -74,7 +74,7 @@ export default function Login() {
     if (ret.status === 201) {
       console.log(ret);
       setToken(ret.data.result);
-      navigate('/course');
+      navigate('/courses');
     } else {
       message.error('username or password is incorrect', 1);
     }

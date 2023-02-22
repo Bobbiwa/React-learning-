@@ -49,7 +49,7 @@ export default function CreateCourse() {
   };
   return (
     <>
-      <Button onClick={() => navigate('/course')} type="primary" size='large' style={{ marginBottom: '2%' }}><RollbackOutlined />Back</Button>
+      <Button onClick={() => navigate('/courses')} type="primary" size='large' style={{ marginBottom: '2%' }}><RollbackOutlined />Back</Button>
       <div style={{ marginLeft: '8%' }}>
         <Form
           labelCol={{
