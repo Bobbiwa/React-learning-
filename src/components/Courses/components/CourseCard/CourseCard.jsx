@@ -2,27 +2,35 @@ import React, { useMemo, useEffect, useState } from 'react';
 import SearchBar from '../SearchBar/SearchBar';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Button } from 'antd';
-// import { mockedCoursesList, mockedAuthorsList } from '../../../../database';
 import CourseInfo from '../../../CourseInfo/CourseInfo';
-import { queryCourseById, queryCourseAll } from '../../../../service/courses';
+import { queryCourseById } from '../../../../service/courses';
 import { queryAuthorsAll } from '../../../../service/users';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  queryCoursesThunk,
+  deleteCourse,
+} from '../../../../store/courses/index';
+import { saveAuthorList } from '../../../../store/authors/index';
 import './courseCard.less';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 export default function CourseCard() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   let { id } = useParams();
 
   useEffect(() => {
-    queryCourseAll().then((res) => {
-      setCoursesData(res.data.result);
-    });
+    dispatch(queryCoursesThunk());
     queryAuthorsAll().then((res) => {
-      setAuthorsData(res.data.result);
+      const { result } = res.data;
+      setAuthorsData(result);
+      dispatch(saveAuthorList(result));
     });
   }, []);
 
-  const [coursesData, setCoursesData] = useState([]);
   const [authorsData, setAuthorsData] = useState([]);
+
+  const coursesData = useSelector((state) => state.course);
 
   const result = useMemo(() => {
     if (id) {
@@ -30,18 +38,17 @@ export default function CourseCard() {
     }
   }, [id]);
 
-  const handleClick = (id) => {
-    return () => {
-      navigate(`/courses/${id}`)
-    }
-  }
+  const handleClick = (id) => () => navigate(`/courses/${id}`);
+
+  const handleDelete = (id) => () => dispatch(deleteCourse(id));
+
   return (
     <div>
       {id && <CourseInfo info={result} />}
       {!id && (
         <div>
           <SearchBar />
-          {coursesData.map((item, index) => (
+          {coursesData.courseList.map((item, index) => (
             <Card
               key={index}
               style={{
@@ -75,14 +82,20 @@ export default function CourseCard() {
                   </p>
                   <p>
                     <span style={{ fontWeight: 'bold' }}>Duration: </span>
-                    <span>8:00 hours</span>
+                    <span>{item.duration} hours</span>
                   </p>
                   <p>
                     <span style={{ fontWeight: 'bold' }}>Created: </span>
-                    <span>01.02.2018</span>
+                    <span>{item.creationDate}</span>
                   </p>
                   <div style={{ marginTop: '10rem', marginLeft: '20rem' }}>
                     <Button onClick={handleClick(item.id)}>Show course</Button>
+                    <Button style={{ margin: '0 3rem' }}>
+                      <EditOutlined />
+                    </Button>
+                    <Button onClick={handleDelete(item.id)}>
+                      <DeleteOutlined />
+                    </Button>
                   </div>
                 </div>
               </div>
