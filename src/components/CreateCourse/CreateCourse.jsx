@@ -13,10 +13,10 @@ export default function CreateCourse() {
   const [time, setTime] = useState('00:00');
   const navigate = useNavigate();
 
-  const ret = mockedAuthorsList.map((item) => {
+
+  const options = mockedAuthorsList.map((item) => {
     return { value: item.id, label: item.name };
   });
-  const options = ret;
   const handleSelectChange = (value) => {
     console.log(`selected ${value}`);
   };
@@ -34,7 +34,7 @@ export default function CreateCourse() {
       if (value) value = parseInt(value);
 
       if (value > 60) {
-        const h = parseInt(value / 60);
+        const h = parseInt(value / 60, 10);
         const m = value % 60;
         setTime(`${fixNum(h)}:${fixNum(m)}`);
       } else {
