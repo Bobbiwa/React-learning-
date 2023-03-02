@@ -8,7 +8,7 @@ export function getToken() {
   return window.localStorage.getItem(TOKEN)
 }
 
-export function removeToken() {
+export function removeTokenandName() {
   window.localStorage.removeItem(TOKEN)
   window.localStorage.removeItem("name")
 }

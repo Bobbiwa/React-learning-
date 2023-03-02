@@ -1,55 +1,66 @@
-import React from 'react'
-import {
-  Button,
-  Form,
-  Input,
-  Select,
-} from 'antd';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Button, Form, Input, Select } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mockedAuthorsList } from '../../database'
+import { mockedAuthorsList } from '../../database';
+import { updateCourseList } from '../../store/courses/index';
 
 const { TextArea } = Input;
 export default function CreateCourse() {
-  const [time, setTime] = useState('00:00')
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const [time, setTime] = useState('00:00');
+  const navigate = useNavigate();
 
-  const ret = mockedAuthorsList.map((item) => {
-    return { value: item.id, label: item.name }
-  })
-  const options = ret
+
+  const options = mockedAuthorsList.map((item) => {
+    return { value: item.id, label: item.name };
+  });
   const handleSelectChange = (value) => {
     console.log(`selected ${value}`);
   };
 
   function fixNum(num) {
-    return ('' + num).length < 2 ? ((new Array(2 + 1)).join('0') + num).slice(-2) : '' + num;
+    return ('' + num).length < 2
+      ? (new Array(2 + 1).join('0') + num).slice(-2)
+      : '' + num;
   }
 
   const handleTime = useMemo(() => {
     return (e) => {
-      var { value } = e.target
+      var { value } = e.target;
 
-      if (value) value = parseInt(value)
+      if (value) value = parseInt(value);
 
       if (value > 60) {
-        const h = parseInt(value / 60)
-        const m = value % 60
-        setTime(`${fixNum(h)}:${fixNum(m)}`)
+        const h = parseInt(value / 60, 10);
+        const m = value % 60;
+        setTime(`${fixNum(h)}:${fixNum(m)}`);
       } else {
-        setTime(`00:${fixNum(value)}`)
+        setTime(`00:${fixNum(value)}`);
       }
-    }
-  })
-
+    };
+  });
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    values.creationDate = new Date().toLocaleDateString();
+    values.duration = parseInt(values.duration) / 60;
+    dispatch(updateCourseList(values));
+    // 问题：上面把数据存到redux之后，下面跳转回course页面，新增数据不显示了（由于页面刷新，redux也刷新了）
+    // navigate('/courses')
   };
   return (
     <>
-      <Button onClick={() => navigate('/courses')} type="primary" size='large' style={{ marginBottom: '2%' }}><RollbackOutlined />Back</Button>
+      <Button
+        onClick={() => navigate('/courses')}
+        type="primary"
+        size="large"
+        style={{ marginBottom: '2%' }}
+      >
+        <RollbackOutlined />
+        Back
+      </Button>
       <div style={{ marginLeft: '8%' }}>
         <Form
           labelCol={{
@@ -64,13 +75,13 @@ export default function CreateCourse() {
           }}
           onFinish={onFinish}
         >
-          <Form.Item label="Title" name='title'>
+          <Form.Item label="Title" name="title">
             <Input />
           </Form.Item>
-          <Form.Item label="Description" name='description'>
+          <Form.Item label="Description" name="description">
             <TextArea rows={4} />
           </Form.Item>
-          <Form.Item label="Select" name='authors'>
+          <Form.Item label="Select" name="authors">
             <Select
               mode="tags"
               style={{
@@ -81,12 +92,19 @@ export default function CreateCourse() {
               options={options}
             />
           </Form.Item>
-          <Form.Item label="Duration" name='duration'>
-            <Input onChange={handleTime} style={{ width: '100%' }} placeholder='Enter duration in minutes...' suffix="min" />
+          <Form.Item label="Duration" name="duration">
+            <Input
+              onChange={handleTime}
+              style={{ width: '100%' }}
+              placeholder="Enter duration in minutes..."
+              suffix="min"
+            />
           </Form.Item>
-          <Form.Item label="Duration" name='time'>
+          <Form.Item label="Duration">
             <div style={{ marginTop: '-5rem' }}>
-              <span style={{ fontSize: '30rem', fontWeight: 'bold' }}>{time}</span>
+              <span style={{ fontSize: '30rem', fontWeight: 'bold' }}>
+                {time}
+              </span>
               <span style={{ fontSize: '20rem' }}> hours</span>
             </div>
           </Form.Item>
@@ -98,6 +116,5 @@ export default function CreateCourse() {
         </Form>
       </div>
     </>
-
-  )
+  );
 }

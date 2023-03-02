@@ -1,7 +1,9 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input,message } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { saveUserList } from '../../store/user/index';
 import LoginContainer from '../../common/LoginContainer';
 import { login } from '../../service/login';
 import { setToken } from '../../utils/token';
@@ -69,11 +71,16 @@ function loginContent() {
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const onFinish = async (values) => {
     const ret = await login(values);
+    const { name, email } = ret.data.user;
     if (ret.status === 201) {
       setToken(ret.data.result);
-      window.localStorage.setItem("name",ret.data.user.name)
+      window.localStorage.setItem('name', name);
+      const rdxDate = { name, email, token: ret.data.result };
+      dispatch(saveUserList(rdxDate));
+      // 问题：不知道为啥，这里跳转页面刷新后 redux里存有数据
       navigate('/courses');
     } else {
       message.error('username or password is incorrect', 1);
