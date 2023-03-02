@@ -1,9 +1,6 @@
-import React, { useMemo, useEffect, useState } from 'react';
-import SearchBar from '../SearchBar/SearchBar';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, Button } from 'antd';
-import CourseInfo from '../../../CourseInfo/CourseInfo';
-import { queryCourseById } from '../../../../service/courses';
 import { queryAuthorsAll } from '../../../../service/users';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -17,7 +14,6 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 export default function CourseCard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  let { id } = useParams();
 
   useEffect(() => {
     dispatch(queryCoursesThunk());
@@ -32,77 +28,64 @@ export default function CourseCard() {
 
   const coursesData = useSelector((state) => state.course);
 
-  const result = useMemo(() => {
-    if (id) {
-      return queryCourseById(id);
-    }
-  }, [id]);
-
   const handleClick = (id) => () => navigate(`/courses/${id}`);
 
   const handleDelete = (id) => () => dispatch(deleteCourse(id));
 
   return (
     <div>
-      {id && <CourseInfo info={result} />}
-      {!id && (
-        <div>
-          <SearchBar />
-          {coursesData.courseList.map((item, index) => (
-            <Card
-              key={index}
-              style={{
-                width: '100%',
-                border: '1px solid green',
-                marginBottom: '20rem',
-                marginTop: '20rem',
-              }}
-            >
-              <div style={{ width: '55%' }}>
-                <p className="card-title">{item.title}</p>
-                <p>{item.description}</p>
+      {coursesData.courseList.map((item, index) => (
+        <Card
+          key={index}
+          style={{
+            width: '100%',
+            border: '1px solid green',
+            marginBottom: '20rem',
+            marginTop: '20rem',
+          }}
+        >
+          <div style={{ width: '55%' }}>
+            <p className="card-title">{item.title}</p>
+            <p>{item.description}</p>
+          </div>
+          <div
+            style={{
+              width: '44%',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <div style={{ width: '60%' }}>
+              <p>
+                <span style={{ fontWeight: 'bold' }}>Authors: </span>
+                <span style={{ width: '100rem' }}>
+                  {
+                    authorsData.find((items) => items.id === item.authors[0])
+                      ?.name
+                  }
+                </span>
+              </p>
+              <p>
+                <span style={{ fontWeight: 'bold' }}>Duration: </span>
+                <span>{item.duration} hours</span>
+              </p>
+              <p>
+                <span style={{ fontWeight: 'bold' }}>Created: </span>
+                <span>{item.creationDate}</span>
+              </p>
+              <div style={{ marginTop: '10rem', marginLeft: '20rem' }}>
+                <Button onClick={handleClick(item.id)}>Show course</Button>
+                <Button style={{ margin: '0 3rem' }}>
+                  <EditOutlined />
+                </Button>
+                <Button onClick={handleDelete(item.id)}>
+                  <DeleteOutlined />
+                </Button>
               </div>
-              <div
-                style={{
-                  width: '44%',
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <div style={{ width: '60%' }}>
-                  <p>
-                    <span style={{ fontWeight: 'bold' }}>Authors: </span>
-                    <span style={{ width: '100rem' }}>
-                      {
-                        authorsData.find(
-                          (items) => items.id === item.authors[0]
-                        )?.name
-                      }
-                    </span>
-                  </p>
-                  <p>
-                    <span style={{ fontWeight: 'bold' }}>Duration: </span>
-                    <span>{item.duration} hours</span>
-                  </p>
-                  <p>
-                    <span style={{ fontWeight: 'bold' }}>Created: </span>
-                    <span>{item.creationDate}</span>
-                  </p>
-                  <div style={{ marginTop: '10rem', marginLeft: '20rem' }}>
-                    <Button onClick={handleClick(item.id)}>Show course</Button>
-                    <Button style={{ margin: '0 3rem' }}>
-                      <EditOutlined />
-                    </Button>
-                    <Button onClick={handleDelete(item.id)}>
-                      <DeleteOutlined />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      )}
+            </div>
+          </div>
+        </Card>
+      ))}
     </div>
   );
 }

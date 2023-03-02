@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './App.less';
 import Header from './components/Header/Header';
 import CouseContainer from './common/CourseContainer/index';
 import { getToken } from './utils/token';
