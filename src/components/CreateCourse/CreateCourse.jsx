@@ -1,9 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, message } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { mockedAuthorsList } from '../../database';
 import { updateCourseList } from '../../store/courses/index';
 
@@ -13,10 +14,16 @@ export default function CreateCourse() {
   const [time, setTime] = useState('00:00');
   const navigate = useNavigate();
 
+  const [author, setAuthor] = useState('');
+  const [options, setOptions] = useState([]);
 
-  const options = mockedAuthorsList.map((item) => {
-    return { value: item.id, label: item.name };
-  });
+  useEffect(() => {
+    let ret = mockedAuthorsList.map((item) => {
+      return { value: item.id, label: item.name };
+    });
+    setOptions(ret);
+  }, []);
+
   const handleSelectChange = (value) => {
     console.log(`selected ${value}`);
   };
@@ -50,6 +57,12 @@ export default function CreateCourse() {
     // 问题：上面把数据存到redux之后，下面跳转回course页面，新增数据不显示了（由于页面刷新，redux也刷新了）
     // navigate('/courses')
   };
+
+  const handleCreateAuthor = () => {
+    const ret = [...options, { value: uuidv4(), label: author }];
+    setOptions(ret);
+    message.success('success',1)
+  };
   return (
     <>
       <Button
@@ -76,10 +89,20 @@ export default function CreateCourse() {
           onFinish={onFinish}
         >
           <Form.Item label="Title" name="title">
-            <Input />
+            <Input placeholder="Title" />
           </Form.Item>
           <Form.Item label="Description" name="description">
             <TextArea rows={4} />
+          </Form.Item>
+          <Form.Item label="Author name">
+            <Input
+              placeholder="Author name"
+              style={{ width: '230rem', marginRight: '5rem' }}
+              onChange={(e) => {
+                setAuthor(e.target.value);
+              }}
+            />
+            <Button onClick={handleCreateAuthor}>create author</Button>
           </Form.Item>
           <Form.Item label="Select" name="authors">
             <Select

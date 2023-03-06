@@ -4,6 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { saveUserList } from '../../store/user/index';
+import { setName } from '../../utils/token';
 import LoginContainer from '../../common/LoginContainer';
 import { login } from '../../service/login';
 import { setToken } from '../../utils/token';
@@ -77,10 +78,9 @@ export default function Login() {
     const { name, email } = ret.data.user;
     if (ret.status === 201) {
       setToken(ret.data.result);
-      window.localStorage.setItem('name', name);
+      setName(name) //把name也存localStorage（在admin页面用）是为了防止admin页面刷新后名字丢失
       const rdxDate = { name, email, token: ret.data.result };
       dispatch(saveUserList(rdxDate));
-      // 问题：不知道为啥，这里跳转页面刷新后 redux里存有数据
       navigate('/courses');
     } else {
       message.error('username or password is incorrect', 1);
