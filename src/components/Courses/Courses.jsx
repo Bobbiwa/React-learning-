@@ -6,6 +6,7 @@ import SearchBar from './components/SearchBar/SearchBar';
 import CourseInfo from '../CourseInfo/CourseInfo';
 import { queryCourseById } from '../../service/courses';
 import { queryCoursesThunk } from '../../store/courses/index';
+import { queryAuthorsThunk } from '../../store/authors/index';
 
 import './courses.less';
 export default function Courses() {
@@ -15,6 +16,7 @@ export default function Courses() {
 
   useEffect(() => {
     dispatch(queryCoursesThunk());
+    dispatch(queryAuthorsThunk());
   }, [queryCoursesThunk]);
 
   const result = useMemo(() => {
