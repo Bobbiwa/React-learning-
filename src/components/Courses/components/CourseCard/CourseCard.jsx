@@ -1,28 +1,17 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Button } from 'antd';
-import { queryAuthorsAll } from '../../../../service/users';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteCourse } from '../../../../store/courses/index';
-import { saveAuthorList } from '../../../../store/authors/index';
 import './courseCard.less';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-
 
 export default function CourseCard({ item, index }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    queryAuthorsAll().then((res) => {
-      const { result } = res.data;
-      setAuthorsData(result);
-      dispatch(saveAuthorList(result));
-    });
-  }, []);
-
-  const [authorsData, setAuthorsData] = useState([]);
+  const authorsData = useSelector((state) => state.author).authorList;
 
   const handleClick = (id) => () => navigate(`/courses/${id}`);
 

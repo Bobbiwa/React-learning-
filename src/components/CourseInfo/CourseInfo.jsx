@@ -5,11 +5,11 @@ import { RollbackOutlined } from '@ant-design/icons';
 // eslint-disable-next-line react/prop-types
 export default function CourseInfo({ info }) {
   const navigate = useNavigate();
-  const [data,setData] = useState([])
+  const [data, setData] = useState([]);
   useEffect(() => {
     // eslint-disable-next-line react/prop-types
     info.then((res) => {
-      setData(res.data.result)
+      setData(res.data.result);
     });
   }, [info]);
   return (
@@ -25,23 +25,27 @@ export default function CourseInfo({ info }) {
           Back
         </Button>
       </div>
-      <div style={{ fontSize: 'xx-large', textAlign: 'center' }}>{data.title}</div>
+      <div style={{ fontSize: 'xx-large', textAlign: 'center' }}>
+        {data.title}
+      </div>
       <div style={{ display: 'flex' }}>
-        <div style={{ width: '60%' }}>{data.description}</div>
+        <div style={{ width: '60%', fontSize: '12rem' }}>
+          {data.description}
+        </div>
         <div style={{ width: '40%' }}>
-          <p style={{ marginBottom: '3%' }}>
+          <p style={{ marginBottom: '3%', fontSize: '12rem' }}>
             <span style={{ fontWeight: 'bold' }}>ID: </span>
             <span>{data.id}</span>
           </p>
-          <p style={{ marginBottom: '3%' }}>
+          <p style={{ marginBottom: '3%', fontSize: '12rem' }}>
             <span style={{ fontWeight: 'bold' }}>Duration: </span>
             <span>{data.duration}</span>
           </p>
-          <p style={{ marginBottom: '3%' }}>
+          <p style={{ marginBottom: '3%', fontSize: '12rem' }}>
             <span style={{ fontWeight: 'bold' }}>Created: </span>
             <span>{data.creationDate}</span>
           </p>
-          <p>
+          <p style={{ fontSize: '12rem' }}>
             <span style={{ fontWeight: 'bold' }}>Authors: </span>
             <span>{data.authors}</span>
           </p>
