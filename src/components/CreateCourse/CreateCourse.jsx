@@ -1,28 +1,26 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Select, message } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { mockedAuthorsList } from '../../database';
 import { updateCourseList } from '../../store/courses/index';
+import { updateAuthorList } from '../../store/authors/index';
 
 const { TextArea } = Input;
 export default function CreateCourse() {
   const dispatch = useDispatch();
   const [time, setTime] = useState('00:00');
   const navigate = useNavigate();
-
   const [author, setAuthor] = useState('');
-  const [options, setOptions] = useState([]);
 
-  useEffect(() => {
-    let ret = mockedAuthorsList.map((item) => {
+  const { authorList } = useSelector((state) => state.author);
+  const options = useMemo(() => {
+    return authorList.map((item) => {
       return { value: item.id, label: item.name };
     });
-    setOptions(ret);
-  }, []);
+  }, [authorList]);
 
   const handleSelectChange = (value) => {
     console.log(`selected ${value}`);
@@ -54,14 +52,12 @@ export default function CreateCourse() {
     values.creationDate = new Date().toLocaleDateString();
     values.duration = parseInt(values.duration) / 60;
     dispatch(updateCourseList(values));
-    // 问题：上面把数据存到redux之后，下面跳转回course页面，新增数据不显示了（由于页面刷新，redux也刷新了）
-    // navigate('/courses')
   };
 
   const handleCreateAuthor = () => {
-    const ret = [...options, { value: uuidv4(), label: author }];
-    setOptions(ret);
-    message.success('success',1)
+    const ret = { id: uuidv4(), name: author };
+    dispatch(updateAuthorList(ret));
+    message.success('success', 1);
   };
   return (
     <>

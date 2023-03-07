@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { queryAuthorsAll } from '../../service/users';
+import { queryAuthorsAll } from '../../service/author';
 const initialState = {
   authorList: [],
 };
@@ -10,6 +10,10 @@ const authorsSlice = createSlice({
   reducers: {
     saveAuthorList: (state, { payload }) => {
       return { authorList: payload };
+    },
+    updateAuthorList: (state, { payload }) => {
+      console.log(payload);
+      return { authorList: [...state.authorList, payload] };
     },
   },
 });
@@ -24,5 +28,5 @@ export const queryAuthorsThunk = () => async (dispatch) => {
   dispatch(saveAuthorList(result));
 };
 
-export const { saveAuthorList } = authorsSlice.actions;
+export const { saveAuthorList, updateAuthorList } = authorsSlice.actions;
 export default authorsSlice.reducer;
