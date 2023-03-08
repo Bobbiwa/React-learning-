@@ -3,9 +3,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteCourse } from '../../../../store/courses/index';
+import { deleteCourseThunk } from '../../../../store/courses/index';
 import './courseCard.less';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { getAuth } from '../../../../utils/token';
 
 export default function CourseCard({ item, index }) {
   const navigate = useNavigate();
@@ -15,8 +16,11 @@ export default function CourseCard({ item, index }) {
 
   const handleClick = (id) => () => navigate(`/courses/${id}`);
 
-  const handleDelete = (id) => () => dispatch(deleteCourse(id));
+  const handleDelete = (id) => () => dispatch(deleteCourseThunk(id));
 
+  const handleEdit = (id) => () => navigate(`/courses/update/${id}`);
+
+  const isAuth = () => (getAuth() === 'true' ? true : false);
   return (
     <Card
       key={index}
@@ -47,20 +51,28 @@ export default function CourseCard({ item, index }) {
           </p>
           <p>
             <span style={{ fontWeight: 'bold' }}>Duration: </span>
-            <span>{item.duration} hours</span>
+            <span>{item.duration.toFixed(2)} hours</span>
           </p>
           <p>
             <span style={{ fontWeight: 'bold' }}>Created: </span>
             <span>{item.creationDate}</span>
           </p>
+
           <div style={{ marginTop: '10rem', marginLeft: '20rem' }}>
             <Button onClick={handleClick(item.id)}>Show course</Button>
-            <Button style={{ margin: '0 3rem' }}>
-              <EditOutlined />
-            </Button>
-            <Button onClick={handleDelete(item.id)}>
-              <DeleteOutlined />
-            </Button>
+            {isAuth() && (
+              <div style={{ display: 'inline-block' }}>
+                <Button
+                  style={{ margin: '0 3rem' }}
+                  onClick={handleEdit(item.id)}
+                >
+                  <EditOutlined />
+                </Button>
+                <Button onClick={handleDelete(item.id)}>
+                  <DeleteOutlined />
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>
