@@ -2,10 +2,11 @@ import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import App from '../App';
 import Courses from '../components/Courses/Courses';
-import CreateCourse from '../components/CreateCourse/CreateCourse';
+import CourseForm from '../components/CourseForm/CourseForm';
 import Login from '../components/Login/Login';
 import Register from '../components/Registration/Registration';
 import CourseInfo from '../components/CourseInfo/CourseInfo';
+import PrivateRoute from '../components/PrivateRoute/PrivateRoute';
 const routerList = [
   {
     path: '/login',
@@ -29,7 +30,11 @@ const routerList = [
       },
       {
         path: '/courses/add',
-        element: <CreateCourse />,
+        element: <PrivateRoute subComponent={<CourseForm />} />,
+      },
+      {
+        path: '/courses/update/:courseId',
+        element: <PrivateRoute subComponent={<CourseForm />} />,
       },
       {
         path: '/courses/:courseId',

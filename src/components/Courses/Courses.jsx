@@ -12,13 +12,12 @@ import './courses.less';
 export default function Courses() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const coursesData = useSelector((state) => state.course);
-
   useEffect(() => {
     dispatch(queryCoursesThunk());
     dispatch(queryAuthorsThunk());
-  }, [queryCoursesThunk]);
+  }, [queryCoursesThunk, queryAuthorsThunk]);
 
+  const coursesData = useSelector((state) => state.course);
   const result = useMemo(() => {
     if (id) {
       return queryCourseById(id);

@@ -1,19 +1,36 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Select, message } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { updateCourseList } from '../../store/courses/index';
-import { updateAuthorList } from '../../store/authors/index';
+import { useNavigate, useParams } from 'react-router-dom';
+import { addCourseThunk, updateCourseThunk } from '../../store/courses/index';
+import { addAuthorThunk } from '../../store/authors/index';
+import { queryCourseById } from '.././../service/courses';
 
 const { TextArea } = Input;
-export default function CreateCourse() {
+export default function CourseForm() {
   const dispatch = useDispatch();
-  const [time, setTime] = useState('00:00');
   const navigate = useNavigate();
+  const [time, setTime] = useState('00:00');
   const [author, setAuthor] = useState('');
+
+  const [handleType, setHandleType] = useState('');
+  const { courseId } = useParams();
+  const formInstance = useRef();
+
+  useEffect(() => {
+    if (courseId) {
+      setHandleType('update');
+      queryCourseById(courseId).then((ret) => {
+        const { result } = ret.data;
+        //数据回显
+        formInstance.current.setFieldsValue(result);
+      });
+    } else {
+      setHandleType('add');
+    }
+  }, [courseId, queryCourseById, setHandleType]);
 
   const { authorList } = useSelector((state) => state.author);
   const options = useMemo(() => {
@@ -48,15 +65,22 @@ export default function CreateCourse() {
     };
   });
 
-  const onFinish = (values) => {
-    values.creationDate = new Date().toLocaleDateString();
+  const onFinish = async (values) => {
+    // values.creationDate = new Date().toLocaleDateString();
     values.duration = parseInt(values.duration) / 60;
-    dispatch(updateCourseList(values));
+    if (handleType === 'add') {
+      const ret = await dispatch(addCourseThunk(values));
+      if (ret.payload.status === 201) message.success('Success', 1);
+    } else {
+      dispatch(updateCourseThunk({courseId, values}));
+    }
+
+    navigate('/courses');
   };
 
   const handleCreateAuthor = () => {
-    const ret = { id: uuidv4(), name: author };
-    dispatch(updateAuthorList(ret));
+    const ret = { name: author };
+    dispatch(addAuthorThunk(ret));
     message.success('success', 1);
   };
   return (
@@ -83,6 +107,7 @@ export default function CreateCourse() {
             maxWidth: 600,
           }}
           onFinish={onFinish}
+          ref={formInstance}
         >
           <Form.Item label="Title" name="title">
             <Input placeholder="Title" />

@@ -3,7 +3,7 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { saveUserList } from '../../store/user/index';
+import { saveUserList, queryIsAdminThunk } from '../../store/user/index';
 import { setName } from '../../utils/token';
 import LoginContainer from '../../common/LoginContainer';
 import { login } from '../../service/login';
@@ -78,9 +78,10 @@ export default function Login() {
     const { name, email } = ret.data.user;
     if (ret.status === 201) {
       setToken(ret.data.result);
-      setName(name) //把name也存localStorage（在admin页面用）是为了防止admin页面刷新后名字丢失
+      setName(name); //把name也存localStorage（在admin页面用）是为了防止admin页面刷新后名字丢失
       const rdxDate = { name, email, token: ret.data.result };
       dispatch(saveUserList(rdxDate));
+      dispatch(queryIsAdminThunk());
       navigate('/courses');
     } else {
       message.error('username or password is incorrect', 1);
