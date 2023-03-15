@@ -32,8 +32,8 @@ export default function CourseCard({ item, index }) {
       }}
     >
       <div style={{ width: '55%' }}>
-        <p className="card-title">{item.title}</p>
-        <p>{item.description}</p>
+        <p className="card-title" role="title">{item.title}</p>
+        <p role="desc">{item.description}</p>
       </div>
       <div
         style={{
@@ -45,7 +45,7 @@ export default function CourseCard({ item, index }) {
         <div style={{ width: '60%' }}>
           <p>
             <span style={{ fontWeight: 'bold' }}>Authors: </span>
-            <span style={{ width: '100rem' }}>
+            <span style={{ width: '100rem' }} role="author">
               {authorsData.find((items) => items.id === item.authors[0])?.name}
             </span>
           </p>

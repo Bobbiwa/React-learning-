@@ -24,11 +24,11 @@ export default function Header() {
   return (
     <div className="header-container">
       <Logo />
-      <span className="header-title">COURSES</span>
-      <span className="header-user" style={{ fontSize: '15rem' }}>
+      <span className="header-title" role="title">COURSES</span>
+      <span className="header-user" style={{ fontSize: '15rem' }} role="username">
         {userName}
       </span>
-      <Button onClick={handleClick}>logout</Button>
+      <Button onClick={handleClick} role="logout">logout</Button>
     </div>
   );
 }
