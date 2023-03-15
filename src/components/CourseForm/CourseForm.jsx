@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Select, message } from 'antd';
 import { RollbackOutlined } from '@ant-design/icons';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addCourseThunk, updateCourseThunk } from '../../store/courses/index';
 import { addAuthorThunk } from '../../store/authors/index';
@@ -24,6 +24,7 @@ export default function CourseForm() {
       setHandleType('update');
       queryCourseById(courseId).then((ret) => {
         const { result } = ret.data;
+        result.duration = result.duration * 60;
         //数据回显
         formInstance.current.setFieldsValue(result);
       });
@@ -49,11 +50,11 @@ export default function CourseForm() {
       : '' + num;
   }
 
-  const handleTime = useMemo(() => {
-    return (e) => {
+  const handleTime = useCallback(() => {
+    (e) => {
       var { value } = e.target;
 
-      if (value) value = parseInt(value);
+      if (value) value = parseInt(value, 10);
 
       if (value > 60) {
         const h = parseInt(value / 60, 10);
@@ -67,12 +68,12 @@ export default function CourseForm() {
 
   const onFinish = async (values) => {
     // values.creationDate = new Date().toLocaleDateString();
-    values.duration = parseInt(values.duration) / 60;
+    values.duration = parseInt(values.duration, 10) / 60;
     if (handleType === 'add') {
       const ret = await dispatch(addCourseThunk(values));
       if (ret.payload.status === 201) message.success('Success', 1);
     } else {
-      dispatch(updateCourseThunk({courseId, values}));
+      dispatch(updateCourseThunk({ courseId, values }));
     }
 
     navigate('/courses');
