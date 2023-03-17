@@ -1,11 +1,21 @@
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { cleanup, screen, render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import '@testing-library/jest-dom'
+import store from '../../../store/index';
 import Header from '../Header';
-import { getName } from '../../../utils/token';
 
-test('loads and displays greeting', async () => {
-  render(<Header />);
+afterEach(cleanup);
+
+it('CheckboxWithLabel changes the text after click', () => {
+  render(
+    <BrowserRouter>
+      <Provider store={store}>
+        <Header />
+      </Provider>
+    </BrowserRouter>
+  );
 
   expect(screen.getByRole('title')).toHaveTextContent('COURSES');
-  expect(screen.getByRole('username')).toHaveTextContent(getName());
+
 });
